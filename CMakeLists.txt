@@ -12,8 +12,8 @@ add_library(gtest
             gtest/gtest.h
             gtest/gtest-all.cc gtest/gtest_main.cc)
 
-add_executable(test huffman_testing.cpp)
-target_link_libraries(test gtest huffman_lib -lpthread)
+add_executable(testing huffman_testing.cpp)
+target_link_libraries(testing gtest huffman_lib -lpthread)
 
 add_executable(huffman cli.cpp)
 target_link_libraries(huffman huffman_lib)

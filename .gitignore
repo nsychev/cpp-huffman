@@ -1,0 +1,6 @@
+test_files/
+cmake-build-debug-linux/
+.idea/
+CMakeCache.txt
+CMakeFiles/
+
