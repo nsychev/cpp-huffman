@@ -1,4 +1,4 @@
-#include "huffman/huffman.hpp"
+#include "lib/huffman.hpp"
 #include <iostream>
 #include <fstream>
 #include <ctime>

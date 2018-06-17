@@ -1,6 +1,6 @@
 #include <sstream>
 #include "gtest/gtest.h"
-#include "huffman/huffman.hpp"
+#include "lib/huffman.hpp"
 #include <random>
 #include <iostream>
 #include <iomanip>
