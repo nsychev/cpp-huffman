@@ -4,10 +4,6 @@
 #include <ctime>
 #include <iomanip>
 
-enum huffman_mode_t {
-    COMPRESS, DECOMPRESS
-};
-
 void print_usage() {
     std::cerr << "\033[1;32mhuffman\033[0m - something about data compression\n\n"
               << "Usage: huffman [mode <input file> [<output file>]]\n\n"
@@ -19,6 +15,10 @@ void print_usage() {
 }
 
 int main(int argc, char *argv[]) {
+    enum huffman_mode_t {
+        COMPRESS, DECOMPRESS
+    };
+
     if (argc <= 1 || argc >= 5) {
         print_usage();
         return 1;
@@ -71,10 +71,10 @@ int main(int argc, char *argv[]) {
 
         if (mode == COMPRESS) {
             std::cerr << "Starting compressing.." << std::endl;
-            huffman::compress(in, out);
+            huffman::compress(input_file, output_file);
         } else {
             std::cerr << "Starting decompressing.." << std::endl;
-            huffman::decompress(in, out);
+            huffman::decompress(input_file, output_file);
         }
 
         clock_t end = clock();
