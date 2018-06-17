@@ -62,6 +62,9 @@ namespace huffman {
         size_t current_buffer = 0;
         size_t bits = 0;
 
+        std::array<char, BUFFER_SIZE> output_buffer;
+        size_t output_size = 0;
+
         do {
             len = static_cast<size_t>(input.readsome(reinterpret_cast<char *>(buf.begin()), BUFFER_SIZE));
 
@@ -70,13 +73,18 @@ namespace huffman {
                 current_buffer |= code << bits;
                 bits += len_table[buf[i]];
                 while (bits >= 8) {
-                    auto out = static_cast<char>(current_buffer & 255u);
-                    output.put(out);
+                    output_buffer[output_size++] = static_cast<char>(current_buffer & 255u);
+                    if (output_size == BUFFER_SIZE) {
+                        output.write(output_buffer.begin(), BUFFER_SIZE);
+                        output_size = 0;
+                    }
                     current_buffer >>= 8;
                     bits -= 8;
                 }
             }
         } while (len > 0);
+
+        output.write(output_buffer.begin(), output_size);
 
         if (bits > 0)
             output.put(static_cast<char>(current_buffer));
@@ -118,6 +126,9 @@ namespace huffman {
 
         huffman_tree::node* current_node = tree.get_root();
 
+        std::array<char, BUFFER_SIZE> output_buffer;
+        size_t output_size = 0;
+
         for (size_t i = 0; i < text_len; i++) {
             while (!current_node->is_leaf()) {
                 if (bits == 0) {
@@ -130,15 +141,21 @@ namespace huffman {
                 --bits;
 
                 if (bit)
-                    current_node = dynamic_cast<huffman_tree::inner_node*>(current_node)->get_right();
+                    current_node = static_cast<huffman_tree::inner_node*>(current_node)->get_right();
                 else
-                    current_node = dynamic_cast<huffman_tree::inner_node*>(current_node)->get_left();
+                    current_node = static_cast<huffman_tree::inner_node*>(current_node)->get_left();
             }
 
-            output.put(dynamic_cast<huffman_tree::leaf*>(current_node)->get_symbol());
+            output_buffer[output_size++] = static_cast<huffman_tree::leaf*>(current_node)->get_symbol();
+            if (output_size == BUFFER_SIZE) {
+                output.write(output_buffer.begin(), BUFFER_SIZE);
+                output_size = 0;
+            }
 
             current_node = tree.get_root();
         }
+
+        output.write(output_buffer.begin(), output_size);
 
         if (current_char != 0) {
             throw std::runtime_error("invalid file format: last byte is corrupted with extra data");
