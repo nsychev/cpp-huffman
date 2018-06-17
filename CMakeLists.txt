@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_library(huffman_library
             lib/huffman.hpp
-            lib/tree.hpp    lib/tree.cpp)
+            lib/tree.hpp lib/tree.cpp)
 
 add_library(gtest
             gtest/gtest.h
